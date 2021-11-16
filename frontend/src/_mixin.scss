@@ -1,0 +1,93 @@
+@mixin zeroStyles {
+  margin: 0;
+  padding: 0;
+}
+
+@mixin flexBetween {
+  display: flex;
+  justify-content: space-between;
+}
+
+@mixin pseudo {
+  position: absolute;
+  content: '';
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+@mixin subTitle {
+  @include zeroStyles();
+  font-family: $fontWS, 'Sergoe UI', Arial, Helvetica, sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 23px;
+  color: $colorTitle;
+}
+
+@mixin label {
+  font-family: $fontU;
+  font-weight: 500;
+  color: $fontColorMain;
+}
+
+@mixin btnStyles {
+  padding: 14px 26px;
+  background: $colorMain;
+  border: none;
+  font-family: $fontU;
+  font-weight: 500;
+  font-size: 16px;
+  color: $colorWhite;
+  &::after {
+    background: linear-gradient(0deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3)), $colorMain;
+  }
+  &::before {
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), $colorMain;
+  }
+  &:hover, &:active, &:focus {
+    color: $colorWhite !important;
+  }
+}
+
+@mixin icoStyles {
+  position: relative;
+  display: inline-block;
+  margin-right: 15px;
+  width: 17px;
+  height: 17px;
+  transform: translateY(2px);
+  z-index: 99;
+}
+
+@mixin inputStyles {
+  padding: 9px 10px 9px 16px;
+  border: 1px solid $colorBorder;
+  border-radius: $borderRadius;
+  line-height: 24px;
+  color: $colorPlaceholder;
+  transition: background .3s ease-in-out, border .3s ease-in-out;
+
+  &:hover {
+    background: rgba(160, 195, 255, 0.05);
+    border: 1px solid $colorMain;
+  }
+
+  &:focus {
+    outline: none;
+    background: rgba(160, 195, 255, 0.1);
+    border: 1px solid $colorMain;
+    font-family: $fontU;
+    font-weight: normal;
+    line-height: 24px;
+    color: $colorInput;
+  }
+
+  &.is-invalid {
+    border-color: $colorError;
+  }
+  &.is-valid {
+    border-color: $colorSuccess;
+  }
+}

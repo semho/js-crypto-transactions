@@ -1,0 +1,752 @@
+
+@import "../node_modules/bootstrap/scss/bootstrap";
+@import '_variables.scss';
+@import '_font.scss';
+@import '_mixin.scss';
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  color: $whiteLink;
+}
+
+ul {
+  @include zeroStyles();
+  list-style: none;
+}
+
+img {
+  max-width: 100%;
+}
+
+html {
+  font-family: $fontMain, arial;
+  font-size: 16px;
+  font-weight: normal;
+  line-height: 20px;
+  color: $fontColorMain;
+}
+
+.container {
+  padding: 0;
+  margin: 0 auto;
+  max-width: $widthSection;
+}
+
+.btn {
+  display: inline-block;
+  position: relative;
+  padding: 12px 22px;
+  background: $colorWhite;
+  border: 2px solid $colorMain;
+  border-radius: $borderRadius;
+  font-family: $fontU, arial;
+  font-weight: 500;
+  color: $colorMain;
+  transition: background .3s ease-in-out, color .3s ease-in-out, border .3s ease-in-out, background-color .3s ease-in-out, opacity .3s ease-in-out;
+  -webkit-backface-visibility: hidden;
+  z-index: 1;
+}
+
+.btn::after {
+  @include pseudo();
+  border-radius: $borderRadius;
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), $colorMain;
+  transition: opacity 0.5s ease-out;
+  z-index: 2;
+  opacity: 0;
+}
+
+.btn::before {
+  @include pseudo();
+  border-radius: $borderRadius;
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), $colorMain;
+  transition: opacity 0.5s ease-out;
+  z-index: 3;
+  opacity: 0;
+}
+
+.btn:hover:after {
+  opacity: 1;
+  color: $colorMain;
+}
+
+.btn:active::before, .btn:focus::before {
+  opacity: 1;
+  color: $colorMain;
+}
+
+.btn span {
+  position: relative;
+  z-index: 4;
+}
+
+.btn:hover {
+  color: $colorMain;
+  box-shadow: none;
+}
+
+.btn:active, .btn:focus, .btn-primary:active:focus {
+  color: $colorMain;
+  box-shadow: none;
+}
+
+.btn-primary.disabled {
+  background: #9CA3AF;
+  opacity: 0.5;
+}
+
+input[type='number'] {
+  -moz-appearance:textfield;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+/*---- header ----*/
+.header {
+  padding-top: 14px;
+  background-color: $colorMain;
+  height: 100px;
+
+  &__container {
+    @include flexBetween();
+  }
+  &__logo {
+    font-family: $fontWS, arial;
+    font-size: 48px;
+    font-weight: 300;
+    color: $colorWhite;
+  }
+  &__list {
+    padding-top: 10px;
+    @include flexBetween();
+  }
+  &__item:not(:last-child) {
+    margin-right: 25px;
+  }
+  &__btn.btn-primary{
+    &:active, &:focus, &:hover {
+      background-color:white;
+    }
+    &.is-active {
+      background-color: $colorItemHover;
+    }
+  }
+
+}
+
+/*----- form login ------*/
+.login-account {
+  &__wrapper {
+    position: fixed; /* or absolute */
+    padding-top: 50px;
+    top: 71%;
+    left: 50%;
+    width:500px;
+    height:366px;
+    background: $backgroundColorLogin;
+    border-radius: 50px;
+
+    -webkit-transform: translate(-50%, -71%);
+    -ms-transform: translate(-50%, -71%);
+    -o-transform: translate(-50%, -71%);
+    transform: translate(-50%, -71%);
+  }
+  &__title {
+    margin-bottom: 35px;
+    padding-left: 30px;
+    font-family: $fontWS, 'Segoe UI', Arial, Helvetica, sans-serif;
+    font-weight: 700;
+    font-size: 34px;
+    line-height: 40px;
+    letter-spacing: 0.76px;
+    color: $colorTitle;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  }
+
+  &__row {
+    position: relative;
+    margin-bottom: 25px;
+    --bs-gutter-x: 0;
+  }
+
+  &__row--2 {
+    margin-bottom: 30px;
+  }
+
+  &__col {
+    margin-right: 30px;
+  }
+
+  &__col--error, &__col--success {
+    margin-right: 0;
+  }
+
+  &__col--1 {
+    padding-left: 8px;
+  }
+
+  &__col--3 {
+    padding-left: 30px;
+  }
+
+  &__error {
+    position: absolute;
+    top: 100%;
+    font-family: $fontU;
+    font-weight: 500;
+    font-size: 16px;
+    color: $colorError;
+  }
+
+  &__label {
+    @include label;
+  }
+
+  &__input {
+    @include inputStyles();
+    width: 300px;
+  }
+
+  &__btn {
+    @include btnStyles();
+  }
+}
+/*------- acounts ---------*/
+.accounts {
+  padding-top: $paddingTopContent;
+
+  &__top {
+    margin-bottom: $marginTopContent;
+  }
+
+  &__top, &__select-wrapper {
+    @include flexBetween();
+    align-items: center;
+  }
+
+  &__wrapper-card {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  &__select-title {
+    margin-right: 35px;
+    font-family: $fontWS, 'Segoe UI', Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 34px;
+    line-height: 40px;
+    letter-spacing: 1.6px;
+    color: $colorTitle;
+    white-space: nowrap;
+  }
+
+  &__select {
+    position: relative;
+    @include zeroStyles;
+    padding-top: 8px;
+    width: 300px;
+  }
+
+  &__select-link {
+    padding: 10px 190px 10px 15px;
+    margin-bottom: 2px;
+    border-radius: $borderRadius;
+    border-color: $colorMain;
+    background-image:none;
+    font-family: $fontU;
+    font-weight: 400;
+    line-height: 24px;
+    color: $colorInput;
+    white-space: nowrap;
+    &:hover {
+      color: $colorInput;
+      cursor: pointer;
+    }
+    &::after {
+      content: '';
+      position: absolute;
+      right: 23px;
+      bottom: 19px;
+      border: 5px solid transparent;
+      border-top: 5px solid $fontColorMain; /* Добавляем треугольник */
+    }
+  }
+
+  &__select-link.is-active-select {
+    &::after {
+      bottom: 25px;
+      border-top: none;
+      border-bottom: 5px solid $fontColorMain;
+    }
+  }
+
+  &__select-box {
+    display: none;
+    position: absolute;
+    padding: 10px 0;
+    width: 300px;
+    border-radius: $borderRadius;
+    background-color: $colorWhite;
+    filter: drop-shadow(0px 5px 20px rgba(0, 0, 0, 0.25));
+    z-index: 99;
+  }
+
+  &__select-option {
+    padding: 10px 16px;
+    font-family: $fontU;
+    font-weight: 400;
+    line-height: 24px;
+    color: $colorInput;
+    transition: background-color .3s ease-in-out;
+    &:hover {
+      background-color: $colorItemHover;
+      cursor: pointer;
+    }
+  }
+
+  &__btn {
+    @include btnStyles();
+  }
+
+  &__img {
+    @include icoStyles();
+  }
+
+  &__btn span{
+    letter-spacing: -0.3px;
+  }
+
+  .card {
+    margin-bottom: 53px;
+    padding: 20px;
+    width: 30%;
+    border: none;
+    border-radius: 9px;
+    box-shadow: $boxShadow;
+    &:not(:nth-child(3n)) {
+      margin-right: 5%;
+    }
+
+    &__title {
+      @include zeroStyles();
+      margin-bottom: 9px;
+      font-family: $fontMain;
+      font-weight: 500;
+      font-size: 18px;
+      line-height: 22px;
+      color: $fontColorMain;
+    }
+
+    &__balance {
+      margin-bottom: 9px;
+      font-family: $fontU;
+      font-weight: normal;
+      font-size: 14px;
+      color: $fontColorMain;
+    }
+
+    &__bottom {
+      @include flexBetween();
+      align-items: flex-end;
+    }
+
+    &__title-transaction, &__date-transaction {
+      display: block;
+      font-family: $fontWS, 'Segoe UI', Arial, Helvetica, sans-serif;
+      font-weight: bold;
+      font-size: 13px;
+      line-height: 15px;
+      letter-spacing: 0.9px;
+      color: $colorTitle;
+    }
+
+    &__date-transaction {
+      font-weight: normal;
+      letter-spacing: 0.3px;
+    }
+
+    &__btn {
+      @include btnStyles();
+    }
+
+  }
+}
+/*------- account-card and accound history---------*/
+.account-card, .account-history {
+  padding-top: $paddingTopContent;
+
+  &__top {
+    @include flexBetween();
+    align-items: center;
+    margin-bottom: $marginTopContent;
+  }
+
+  &__title {
+    margin-right: 35px;
+    font-family: $fontWS, 'Segoe UI', Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 34px;
+    line-height: 40px;
+    color: $colorTitle;
+    white-space: nowrap;
+  }
+
+  &__btn {
+    @include btnStyles();
+  }
+
+  &__img {
+    @include icoStyles();
+  }
+
+  &__btn span{
+    letter-spacing: -0.3px;
+  }
+
+  &__info, &__view {
+    @include flexBetween();
+    margin-bottom: 50px;
+  }
+
+  &__number {
+    font-family: $fontWS, 'Sergoe UI', Arial, Helvetica, sans-serif;
+    font-weight: 400;
+    font-size: 34px;
+    line-height: 40px;
+    color: $colorTitle;
+  }
+
+  &__balance {
+    @include subTitle();
+  }
+
+  &__balance-name {
+    margin-right: 50px;
+  }
+  &__balance-price {
+    font-weight: 400;
+  }
+
+  .new-transaction {
+    padding: 25px 50px;
+    max-width: 606px;
+    background-color: $backgroundColorLogin;
+    border-radius: 50px;
+    &__title {
+      @include subTitle();
+      margin-bottom: 25px;
+    }
+
+    &__col {
+      position: relative;
+      margin-bottom: 25px;
+      text-align: end;
+    }
+
+    &__list {
+      position: absolute;
+      padding: 9px 10px 9px 16px;
+      width: 300px;
+      border: 1px solid $colorBorder;
+      border-bottom-left-radius: 7px;
+      border-bottom-right-radius: 7px;
+      background-color: $colorWhite;
+      text-align: left;
+      z-index: 9;
+    }
+
+    &__label {
+      @include label();
+    }
+
+    &__btn {
+      @include btnStyles();
+    }
+
+    &__img {
+      @include icoStyles();
+    }
+
+    &__input {
+      @include inputStyles();
+      width: 300px;
+    }
+
+    &__link {
+      color: $fontColorMain
+    }
+  }
+
+  .chart {
+    padding: 25px 50px 25px 50px;
+    width: 684px;
+    height: 288px;
+    box-shadow: $boxShadow;
+    border-radius: 50px;
+    #gd {
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    &__title {
+      @include subTitle();
+    }
+
+    .xtick text, .ytick text {
+      font-size: 20px !important;
+      font-family: $fontWS, "Segoe UI" !important;
+      font-weight: bold !important;
+      fill: #000 !important;
+    }
+
+    .ytick text {
+      font-weight: 500 !important;
+    }
+
+  }
+
+  .history-transaction {
+    padding: 25px 50px;
+    margin-bottom: 31px;
+    background-color: $backgroundColorLogin;
+    border-radius: 56px;
+
+    &__title {
+      @include subTitle();
+      margin-bottom: 25px;
+    }
+
+    &__thead {
+      height: 64px;
+      background-color: $colorMain;
+      vertical-align: middle;
+
+      & th {
+        padding-left: 50px;
+        width: 20%;
+        font-family: $fontU;
+        font-weight: 500;
+        font-size: 20px;
+        line-height: 24px;
+        color: $colorWhite;
+        &:first-child {
+          -webkit-border-top-left-radius: 15px;
+          -webkit-border-bottom-left-radius: 15px;
+          -moz-border-top-left-radius: 15px;
+          -moz-border-bottom-left-radius: 15px;
+          -khtml-border-top-left-radius: 15px;
+          -khtml-border-bottom-left-radius: 15px;
+          border-top-left-radius: 15px;
+          border-bottom-left-radius: 15px;
+        }
+        &:last-child {
+          -webkit-border-top-right-radius: 15px;
+          -webkit-border-bottom-right-radius: 15px;
+          -moz-border-top-right-radius: 15px;
+          -moz-border-bottom-right-radius: 15px;
+          -khtml-border-top-right-radius: 15px;
+          -khtml-border-bottom-right-radius: 15px;
+          border-top-right-radius: 15px;
+          border-bottom-right-radius: 15px;
+        }
+      }
+    }
+    &__tbody {
+      border-top: none;
+
+      & tr {
+        height: 71px;
+        border-bottom: 2px solid rgba(0, 82, 255, 0.1);
+        vertical-align: middle;
+        cursor: pointer;
+
+        & td {
+          padding-left: 50px;
+          width: 20%;
+        }
+
+        & td.plus {
+          color: $colorSuccess;
+        }
+
+        & td.minus {
+          color: $colorError;
+        }
+      }
+    }
+
+  }
+}
+/*------- only account-history -------*/
+.account-history {
+  .chart {
+    margin-bottom: 50px;
+    padding: 26px 98px;
+    width: 100%;
+  }
+  .pagination {
+    &__list {
+      display: flex;
+      margin: 0 auto;
+      padding-top: 15px;
+    }
+
+    &__item {
+      &:not(:last-child) {
+        margin-right: 2%;
+      }
+    }
+
+
+    &__btn {
+      @include btnStyles();
+      border-radius: 15px;
+    }
+  }
+}
+/*------- currency --------*/
+.currency {
+  padding-top: $paddingTopContent;
+
+  &__top {
+    margin-bottom: $marginTopContent;
+  }
+
+  &__title {
+    margin-right: 35px;
+    font-family: $fontWS, 'Segoe UI', Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 34px;
+    line-height: 40px;
+    letter-spacing: 1.6px;
+    color: $colorTitle;
+    white-space: nowrap;
+  }
+
+  &__bottom {
+    @include flexBetween();
+  }
+
+  &__currencies {
+    margin-bottom: 44px;
+  }
+
+  &__left-wrapper {
+    width: 43.88%;
+  }
+
+  .currencies, .exchange {
+    padding: 50px;
+    width: 100%;
+    box-shadow: $boxShadow;
+    border-radius: 50px;
+
+    &__title {
+      @include subTitle();
+      margin-bottom: 25px;
+    }
+  }
+
+  .currencies {
+    &__item {
+      @include flexBetween();
+      font-family: $fontWS, 'Sergoe UI', Arial, Helvetica, sans-serif;
+      font-size: 20px;
+      line-height: 23px;
+      color: $colorTitle;
+    }
+
+    &__item:not(:last-child) {
+      margin-bottom: 25px;
+    }
+
+    &__code {
+      margin-right: 8px;
+      font-weight: 600;
+    }
+
+    &__border {
+      margin-right: 8px;
+      width: 100%;
+      border-bottom: 1px dashed;
+      transform: translateY(-7px);
+    }
+
+    &__amount {
+      font-weight: 400;
+      white-space: nowrap;
+    }
+  }
+
+  .exchange {
+    &__firstRow {
+      margin-bottom: 25px;
+    }
+
+    &__col {
+      position: relative;
+      margin-bottom: 25px;
+      text-align: end;
+    }
+
+    &__label {
+      @include label();
+    }
+
+    &__btn {
+      @include btnStyles();
+      padding-left: 13px;
+      padding-right: 13px;
+      height: 100%;
+    }
+
+    &__input {
+      @include inputStyles();
+      width: 100%;
+    }
+
+    &__input--amount {
+      width: 100%;
+    }
+
+    .select {
+      padding-top: 0;
+      width: 100%;
+
+      &__link {
+        @include inputStyles();
+        margin-bottom: 0;
+        &::after {
+          bottom: 15px;
+        }
+        &.is-active-select::after {
+          bottom: 20px;
+        }
+      }
+
+      &__list {
+        width: 100%;
+      }
+    }
+
+  }
+
+  .course-change {
+    padding: 50px;
+    width: 52.46%;
+    border-radius: 50px;
+    background-color: $backgroundColorChange;
+
+    &__title {
+      @include subTitle();
+      margin-bottom: 25px;
+    }
+  }
+}
