@@ -22,7 +22,7 @@ import { showChartDynamicBalance, showChartRatio } from './charts.js'; //биб�
 import History from './history.js'; //подключаем класс для отображения подробной истории счета
 import Currency from './currency.js'; //класс для отображения валютных операций
 
-// import WebSocket from 'ws';
+import WebSocket from 'ws';
 // import WebsocketTransport from 'websocket-transport';
 
 const router = new Navigo('/'); //роутинг
@@ -111,10 +111,10 @@ async function isCurrency() {
     );
 
     //подключаем WebSocket
-    // const ws = new WebSocket('http://localhost:3000/currency-feed');
-    // ws.on('message', function incoming(message) {
-    //   console.log('received: ', message);
-    // });
+    const ws = new WebSocket('http://localhost:3000/currency-feed');
+    ws.on('message', function incoming(message) {
+      console.log('received: ', message);
+    });
 
     // WebsocketTransport.connect(
     //   {

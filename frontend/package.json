@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "build": "del /f /s /q dist && webpack --mode=production --env prod",
-    "dev": "webpack serve --mode=development --client-progress --client-web-socket-transport ws --web-socket-server ws",
+    "dev": "webpack serve --mode=development --client-progress",
     "lint": "eslint ./",
     "test": "jest"
   },

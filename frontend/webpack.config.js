@@ -10,8 +10,8 @@ module.exports = (env) => ({
     fallback: {
       bufferutil: false,
       'utf-8-validate': false,
-      // fs: false,
-      // path: true,
+      fs: false,
+      path: false,
       os: false,
       zlib: false,
       stream: false,
@@ -92,9 +92,9 @@ module.exports = (env) => ({
     //отображает в браузере процесс компиляции в процентах
     client: {
       progress: true,
-      webSocketTransport: 'ws',
+      // webSocketTransport: 'ws',
     },
-    webSocketServer: 'ws',
+    // webSocketServer: 'ws',
     historyApiFallback: true, //для работы виртуальных ссылок, которых в реальности нет
     hot: true, //не перезагружать всю страницу при изменении какого-то модуля, к примеру css(перезагружать только css)
 
