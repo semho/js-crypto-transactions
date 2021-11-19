@@ -14,8 +14,7 @@
     "navigo": "^8.11.1",
     "plotly.js-dist-min": "^2.6.1",
     "redom": "^3.27.1",
-    "websocket-transport": "^1.0.1",
-    "ws": "^8.2.3"
+    "ymaps": "^0.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.15.8",

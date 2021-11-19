@@ -6,22 +6,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin'); //подклю�
 const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin'); //подключаем плагин для минимизации картинок
 //eslint-disable-next-line no-undef
 module.exports = (env) => ({
-  resolve: {
-    fallback: {
-      bufferutil: false,
-      'utf-8-validate': false,
-      fs: false,
-      path: false,
-      os: false,
-      zlib: false,
-      stream: false,
-      net: false,
-      tls: false,
-      crypto: false,
-      http: false,
-      https: false,
-    },
-  },
   entry: './src/index.js',
   output: {
     filename: './js/main.[contenthash].js',
@@ -92,23 +76,8 @@ module.exports = (env) => ({
     //отображает в браузере процесс компиляции в процентах
     client: {
       progress: true,
-      // webSocketTransport: 'ws',
     },
-    // webSocketServer: 'ws',
     historyApiFallback: true, //для работы виртуальных ссылок, которых в реальности нет
     hot: true, //не перезагружать всю страницу при изменении какого-то модуля, к примеру css(перезагружать только css)
-
-    // compress: true,
-    // port: 8080,
-    // host: '0.0.0.0',
-    // open: false,
-    // proxy: [
-    //   {
-    //     context: ['/websocket'],
-    //     target: `wss://localhost:3000/currency-feed/`,
-    //     changeOrigin: true,
-    //     ws: true,
-    //   },
-    // ],
   },
 });

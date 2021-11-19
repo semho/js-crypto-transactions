@@ -1,11 +1,12 @@
 import 'babel-polyfill';
 import ComponentError from './error.js';
-const URL = 'http://localhost:3000/'; //порт подключения к API
+
+const URL = 'localhost:3000/'; //порт подключения к API
 let errors = []; //массив для сохранения ошибок
 //запрос от обработчика события на вход в приложение
 export async function loginInToApp(login, password) {
   try {
-    const response = await fetch(`${URL}login`, {
+    const response = await fetch(`http://${URL}login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
@@ -41,7 +42,7 @@ export async function loginInToApp(login, password) {
 //Возвращаем список счетов
 export async function getAccounts(token) {
   try {
-    const response = await fetch(`${URL}accounts`, {
+    const response = await fetch(`http://${URL}accounts`, {
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
         Authorization: `Basic ${token}`,
@@ -65,7 +66,7 @@ export async function getAccounts(token) {
 //Возвращаем подробную информацию о счете
 export async function getAccountDetail(token, id) {
   try {
-    const response = await fetch(`${URL}account/${id}`, {
+    const response = await fetch(`http://${URL}account/${id}`, {
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
         Authorization: `Basic ${token}`,
@@ -89,7 +90,7 @@ export async function getAccountDetail(token, id) {
 //создаем новый счет
 export async function createNewAccount(token) {
   try {
-    const response = await fetch(`${URL}create-account`, {
+    const response = await fetch(`http://${URL}create-account`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
@@ -115,7 +116,7 @@ export function showError() {
 export async function transferFoundsAccount(obj, token) {
   if (obj === undefined) return;
   try {
-    const response = await fetch(`${URL}transfer-funds`, {
+    const response = await fetch(`http://${URL}transfer-funds`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
@@ -162,7 +163,7 @@ export async function transferFoundsAccount(obj, token) {
 // возвращает список валютных счетов текущего пользователя
 export async function getCurrencies(token) {
   try {
-    const response = await fetch(`${URL}currencies`, {
+    const response = await fetch(`http://${URL}currencies`, {
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
         Authorization: `Basic ${token}`,
@@ -185,7 +186,7 @@ export async function getCurrencies(token) {
 // возвращает массив со списком кодов всех используемых бекэндом валют на данный момент
 export async function getAllCurrencies(token) {
   try {
-    const response = await fetch(`${URL}all-currencies`, {
+    const response = await fetch(`http://${URL}all-currencies`, {
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
         Authorization: `Basic ${token}`,
@@ -210,7 +211,7 @@ export async function getAllCurrencies(token) {
 export async function currencyTransfer(obj, token) {
   if (obj === undefined) return;
   try {
-    const response = await fetch(`${URL}currency-buy`, {
+    const response = await fetch(`http://${URL}currency-buy`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
@@ -249,6 +250,33 @@ export async function currencyTransfer(obj, token) {
       } else {
         return res;
       }
+    } else {
+      throw new ComponentError('Нет ответа от сервера');
+    }
+  } catch (error) {
+    ComponentError.errorHandling(error);
+  }
+}
+//подключение протокола WebSocket
+export async function connectWebSocket() {
+  try {
+    const ws = new WebSocket(`ws://${URL}currency-feed`);
+    return ws;
+  } catch (error) {
+    ComponentError.errorHandling(error);
+  }
+}
+//запрос на получение координат банкоматов
+export async function getCoordinates() {
+  try {
+    const response = await fetch(`http://${URL}banks`, {
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+    });
+    if (response.ok === true) {
+      const res = await response.json();
+      return res;
     } else {
       throw new ComponentError('Нет ответа от сервера');
     }

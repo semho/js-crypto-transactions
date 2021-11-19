@@ -2,6 +2,8 @@ import 'babel-polyfill';
 import { el } from 'redom';
 import CustomSelect from './customSelect';
 import ComponentError from './error.js';
+import courseUp from './assets/images/courseUp.svg';
+import courseDown from './assets/images/courseDown.svg';
 
 export default class Currency {
   constructor(dataCurrencies, arrAllCurrencies) {
@@ -84,12 +86,16 @@ export default class Currency {
             ])),
           ])),
         ])),
-        (this.rightWrapper = el('.currency__right-wrapper.course-change', [
-          (this.title = el(
-            '.course-change__title',
-            'Изменение курсов в реальном времени'
-          )),
-        ])),
+        (this.rightWrapper = el(
+          '.currency__right-wrapper.course-change',
+          (this.box = el('.course-change__box', [
+            (this.title = el(
+              '.course-change__title',
+              'Изменение курсов в реальном времени'
+            )),
+            (this.courseChangeList = el('ul.course-change__list')),
+          ]))
+        )),
       ])),
     ]);
     //запрещаем вводить все символы, кроме цифр в поле водда суммы
@@ -119,7 +125,7 @@ export default class Currency {
         throw new ComponentError(errors['amount']);
       } else if (!/^(0|[1-9]\d*)$/.test(this.amount.value)) {
         errors['noNumber'] =
-          'В поле ввода суммы не число, либо оно начинается с нуля';
+          'В поле ввода суммы не число, либо оно начинается с нуля или оно отрицательное';
         this.amount.classList.add('is-invalid');
         throw new ComponentError(errors['noNumber']);
       } else if (
@@ -202,7 +208,7 @@ export default class Currency {
   //возвращает преобразованную ценну с пробелами через 3 знака и без нулей после запятой
   transformAmount(amount) {
     //преобразовываем цену и убираем ноль в конце строки
-    const numberFormat = this.number_format(amount, '2', '.', ' ').replace(
+    const numberFormat = this.numberFormat(amount, '2', '.', ' ').replace(
       /0*$/,
       ''
     );
@@ -218,7 +224,7 @@ export default class Currency {
   @param {string} dec_point     указываем разделитель
   @param {string} thousands_sep указываем символ, который будет разделять целые числа при их длине строки больше 3
   */
-  number_format(number, decimals, dec_point, thousands_sep) {
+  numberFormat(number, decimals, dec_point, thousands_sep) {
     // Format a number with grouped thousands
     var i, j, kw, kd, km;
 
@@ -251,5 +257,38 @@ export default class Currency {
       : '';
 
     return km + kw + kd;
+  }
+  //метод добавляет новый элемент списка с курсом
+  addItemCourse(obj) {
+    //в отдельную констанку выделяем элемент под бордер для возножности дальнейшей смены цвета в зависимости от курса
+    const border = el('span.course-change__border');
+    //новый элемент списка с курсом
+    const li = el('li.course-change__item', [
+      el('span.course-change__code', `${obj.from}/${obj.to}`),
+      border,
+      el('span.course-change__rate', obj.rate),
+      el('span.course-change__change', this.courseChange(obj.change, border)),
+    ]);
+    //если элементов уже больше 12, то удаляем первый в списке(последний в коллекции)
+    if (this.courseChangeList.childNodes.length < 12) {
+      return this.courseChangeList.prepend(li);
+    } else {
+      this.courseChangeList.lastChild.remove();
+      return this.courseChangeList.prepend(li);
+    }
+  }
+  //в зависимости от курса меняем цвет бордера и цвет/положение стрелки
+  courseChange(value, border) {
+    if (value === 1) {
+      //курс растет
+      const img = el('img', { src: courseUp });
+      border.style.color = '#76CA66';
+      return img;
+    } else {
+      //курс падает
+      const img = el('img', { src: courseDown });
+      border.style.color = '#FD4E5D';
+      return img;
+    }
   }
 }

@@ -1,5 +1,41 @@
 import 'babel-polyfill';
 import Plotly from 'plotly.js-dist-min';
+import { getAccountDetail } from './query.js'; // запросы к API
+import ComponentError from './error.js';
+
+//функция отображает график за последние countMonths месяцев на странице счета после рендеринга страницы
+export async function showChartForPage(obj, objRatio) {
+  try {
+    // const data = await getAccountDetail(token, obj.id); //получаем данные текущего счета
+    const data = await getAccountDetail(
+      localStorage.getItem('tokenStorage'),
+      obj.id
+    ); //получаем данные текущего счета
+    if (!data) {
+      //если нет доступа
+      throw new ComponentError('Не удалось получить доступ к данному счету');
+    }
+    //привязываем график после загрузки DOM
+    showChartDynamicBalance(
+      obj.id,
+      data.payload.transactions,
+      obj.countMonths,
+      obj.container
+    );
+    //если передан второй объект, отрисовываем график соотношений
+    if (objRatio) {
+      showChartRatio(
+        obj.id,
+        data.payload.transactions,
+        obj.countMonths,
+        objRatio.container
+      );
+    }
+  } catch (error) {
+    ComponentError.errorHandling(error);
+  }
+}
+
 /*
  функция показывает график динамики баланса текущего счета за определенный период
   @param {String} id            номер счета
@@ -7,12 +43,7 @@ import Plotly from 'plotly.js-dist-min';
   @param {number} countMonths   количество месяцев
   @param {String} container     Имя id контейнера в DOM
   */
-export function showChartDynamicBalance(
-  id,
-  transactions,
-  countMonths,
-  container
-) {
+function showChartDynamicBalance(id, transactions, countMonths, container) {
   if (transactions.length === 0) return;
   //получаем копию массива объектов только с входящими транзакциями текущего счета
   const incomingTransactions = transactions
@@ -35,7 +66,7 @@ export function showChartDynamicBalance(
 функция показывает график соотношение входящих исходящих транзакций текущего счета за определенный период
 параметры теже самые, что и в предыдущей
 */
-export function showChartRatio(id, transactions, countMonths, container) {
+function showChartRatio(id, transactions, countMonths, container) {
   if (transactions.length === 0) return;
   //получаем копию массива объектов только с входящими транзакциями текущего счета
   const incomingTransactions = transactions
