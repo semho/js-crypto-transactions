@@ -23,9 +23,9 @@ export default class Card {
           (this.el = el('.account-card__number', `N ${data.account}`)),
           (this.el = el('.account-card__balance', [
             (this.el = el('span.account-card__balance-name', 'Баланс')),
-            (this.el = el(
+            (this.balance = el(
               'span.account-card__balance-price',
-              data.balance + ' Р'
+              data.balance + ' ₽'
             )),
           ])),
         ])),
@@ -175,6 +175,7 @@ export default class Card {
   getBtnSend() {
     return this.buttonSend;
   }
+
   //метод переводит средства с текущего счета на новый счет
   transferFunds(data) {
     const errors = []; //массив для ошибок
@@ -297,7 +298,7 @@ export default class Card {
   //метод меняет знак и цвет суммы перевода
   checkingTransferAmount(data, element) {
     if (data.account === element.to) {
-      return el('td.plus', `+ ${element.amount} Р`);
-    } else return el('td.minus', `- ${element.amount} Р`);
+      return el('td.plus', `+ ${element.amount} ₽`);
+    } else return el('td.minus', `- ${element.amount} ₽`);
   }
 }

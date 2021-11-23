@@ -82,17 +82,17 @@ export default class History {
       const lastTransactions = sortedByDate.slice(0, 250);
       //получаем массив массивов объектов
       const arrCommon = this.getArrForPagination(lastTransactions);
-      const list = el('ul.pagination__list'); //список
+      const list = el('ul.paginations__list'); //список
       //вставляем каждый элемент списка в список
       for (let index = 0; index < arrCommon.length; index++) {
         list.append(
           el(
-            'li.pagination__item',
+            'li.paginations__item',
             el(
-              'a.pagination__link',
+              'a.paginations__link',
               { href: index },
               el(
-                'button.pagination__btn.btn.btn-primary',
+                'button.paginations__btn.btn.btn-primary',
                 { type: 'button' },
                 el('span', index + 1)
               )
@@ -104,7 +104,10 @@ export default class History {
       list.addEventListener('click', (event) =>
         this.openPage(list, arrCommon, id, event)
       );
-      const container = el('.history-transaction__pagination.pagination', list);
+      const container = el(
+        '.history-transaction__paginations.paginations',
+        list
+      );
 
       return container;
     }
@@ -112,7 +115,7 @@ export default class History {
   //обработка нажатие на страницу постраничной навигации таблицы истории транзакций
   openPage(list, data, id, event) {
     event.preventDefault();
-    const currentPage = event.target.closest('.pagination__link');
+    const currentPage = event.target.closest('.paginations__link');
     if (!currentPage || !list.contains(currentPage)) return;
     const body = this.getBodyTable(data[currentPage.getAttribute('href')], id);
     document.querySelector('.history-transaction__tbody').replaceWith(body);

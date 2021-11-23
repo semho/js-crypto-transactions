@@ -105,7 +105,7 @@ export default class Login {
       //и на каждое поле вешаем обработчик событий blur, после срабатывания которого, отправляем данные поля в функцию
       element.addEventListener('blur', (ev) => this.validationBlur(ev));
       //событие input на каждое поле ввода
-      element.addEventListener('input', () => {
+      element.addEventListener('input', (ev) => {
         //убираем класс ошибки при вводе нового символа
         element.classList.remove('is-invalid');
         element
@@ -116,6 +116,10 @@ export default class Login {
           .closest('.login-account__row')
           .querySelector('.login-account__error')
           .classList.add('d-none');
+        //отправляем данные поля ввода на проверку, если количество символов более 5
+        if (element.value.length > 5) {
+          this.validationBlur(ev);
+        }
       });
     });
     //флаги состояния валидации полей ввода
@@ -138,10 +142,16 @@ export default class Login {
   validationBlur(event) {
     switch (event.target) {
       case this.login: //если передаем логин
-        this.conditionHandling(event.target, 'login', 'Слишком короткий логин');
+        this.conditionHandling(
+          event.target.value,
+          event.target,
+          'login',
+          'Слишком короткий логин'
+        );
         break;
       case this.password: //если передаем пароль
         this.conditionHandling(
+          event.target.value,
           event.target,
           'password',
           'Слишком короткий пароль'
@@ -192,18 +202,25 @@ export default class Login {
   }
   //метод обработки условия
   /*
+  @param {String} value   передаем значение поля ввода
   @param {String} input   передаем поле ввода
   @param {String} flag    строка с названием поля для проверки на валидацию
   @param {String} message сообщение об ошибке
   */
-  conditionHandling(input, flag, message) {
+  conditionHandling(value, input, flag, message) {
     try {
-      if (input.value.length < 6) {
-        this[`${flag}Valide`] = false;
-        this.recordError(input, message);
+      if (value.length < 6) {
+        if (input) {
+          this[`${flag}Valide`] = false;
+          this.recordError(input, message);
+        }
+        return false;
       } else {
-        this.showError(input, true);
-        this[`${flag}Valide`] = true;
+        if (input) {
+          this.showError(input, true);
+          this[`${flag}Valide`] = true;
+        }
+        return true;
       }
     } catch (error) {
       this.errorHandling(error);

@@ -9,6 +9,7 @@ import {
   currencyTransfer,
 } from './query.js'; // запросы к API
 import { isAccounts } from './index.js';
+
 //обработка события входа в приложение
 export async function enterInApp(login, token, router) {
   const data = await loginInToApp(login.getLogin(), login.getPassword()); //получаем ответ от сервера
@@ -64,6 +65,9 @@ export async function sendTransferFunds(card, data, id) {
     const body = card.getBodyTable(newData.payload); //отправляем новые данные для формирования таблицы
     const oldBody = document.querySelector('.history-transaction__tbody');
     oldBody.replaceWith(body); //обновляем таблицу
+
+    document.querySelector('.account-card__balance-price').innerHTML =
+      newData.payload.balance + ' ₽';
   }
 }
 //сохранение объекта в локальном хранилище с данными о транзакции

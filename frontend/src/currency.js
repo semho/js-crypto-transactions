@@ -123,9 +123,9 @@ export default class Currency {
         errors['amount'] = 'Сумма обмена не может быть ноль или пустой';
         this.amount.classList.add('is-invalid');
         throw new ComponentError(errors['amount']);
-      } else if (!/^(0|[1-9]\d*)$/.test(this.amount.value)) {
+      } else if (!/^[0-9]*\d?(\.\d{1,2})?$/.test(this.amount.value)) {
         errors['noNumber'] =
-          'В поле ввода суммы не число, либо оно начинается с нуля или оно отрицательное';
+          'В поле ввода суммы не число, либо оно отрицательное, либо неверный формат';
         this.amount.classList.add('is-invalid');
         throw new ComponentError(errors['noNumber']);
       } else if (
@@ -165,7 +165,9 @@ export default class Currency {
       // Разрешаем: Ctrl+V
       (event.keyCode == 86 && event.ctrlKey === true) ||
       // Разрешаем: home, end, влево, вправо
-      (event.keyCode >= 35 && event.keyCode <= 39)
+      (event.keyCode >= 35 && event.keyCode <= 39) ||
+      //разрешаем точку
+      event.keyCode == 190
     ) {
       // Ничего не делаем
       return;

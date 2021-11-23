@@ -110,7 +110,7 @@ export default class Accounts {
       //контейнер одного счета
       const card = el('.accounts__card.card', [
         el('h3.card__title', `${objCard.account}`),
-        el('span.card__balance', `${objCard.balance} Р`),
+        el('span.card__balance', `${objCard.balance} ₽`),
         el('.card__bottom', [
           elInfoTransaction,
           el(

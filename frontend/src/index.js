@@ -13,7 +13,6 @@ import {
   connectWebSocket,
   getCoordinates,
 } from './query.js'; // запросы к API
-
 import {
   enterInApp,
   addNewAccountEvent,
@@ -22,7 +21,6 @@ import {
   currencyExchangeEvent,
   messageFlow,
 } from './eventHandler.js'; //функции для обработчиков событий
-
 import Accounts from './accounts.js'; //класс для отображения всех счетов
 import Card from './card.js'; //класс для отображения счета детально
 import { showChartForPage } from './charts.js'; //библиотека графиков с их отображениями
@@ -57,6 +55,8 @@ async function isIndex() {
 //функция загружает страницу со счетами
 export async function isAccounts() {
   try {
+    //подставляем лоадер-скелетон
+    loaderSkeletonAccounts();
     // const data = await getAccounts(token); //получаем данные от сервера в виде массива объектов счетов
     const data = await getAccounts(localStorage.getItem('tokenStorage')); //получаем данные от сервера в виде массива объектов счетов
     if (!data) {
@@ -178,7 +178,7 @@ async function isMap() {
     //запрос к серверу на получение координат банкоматов
     const coordinates = await getCoordinates();
     if (!coordinates) return;
-    //вызываем новый объект класса Map и передаем координаты
+    //вызываем новый экземпляр объекта класса Map и передаем координаты
     const map = new Map(coordinates.payload);
 
     return el('section.section-map.map', map);
@@ -202,6 +202,28 @@ function pageActive(number) {
   });
   list[number].classList.add('is-active');
 }
+//функция лоадер-скелетон
+function loaderSkeletonAccounts() {
+  const container = el('.loader.container', [
+    el('.loader__top'),
+    el('.loader__bottom', [
+      el('.loader__skeleton'),
+      el('.loader__skeleton'),
+      el('.loader__skeleton'),
+    ]),
+  ]);
+
+  setChildren(main, container);
+}
+//функция добавления скелетона графика
+function loaderSkeletonChart(id) {
+  const container = document.getElementById(id);
+  setChildren(container, el('.skeletonChart'));
+}
+//функция удаления скелетона графика
+function destroySkeleton(id) {
+  document.getElementById(id).querySelector('.skeletonChart').remove();
+}
 
 //роутинг
 router.on({
@@ -219,24 +241,44 @@ router.on({
     pageActive(1);
   },
   '/account_id=:id': async ({ data: { id } }) => {
-    setChildren(main, await isCard(id));
-    //обновляем страницу для рендеринга графика
-    await showChartForPage({ id: id, countMonths: 6, container: 'gd' });
-    //переход к подробной истории баланса через события клика по графику или таблице
-    moveHistoryAccount('#gd', id);
-    moveHistoryAccount('.history-transaction__tbody', id);
+    try {
+      setChildren(main, await isCard(id));
+      //лоадер-скелетон для графика
+      loaderSkeletonChart('gd');
+      //обновляем страницу для рендеринга графика
+      await showChartForPage({ id: id, countMonths: 6, container: 'gd' });
+      //переход к подробной истории баланса через события клика по графику или таблице
+      moveHistoryAccount('#gd', id);
+      moveHistoryAccount('.history-transaction__tbody', id);
+    } catch (error) {
+      ComponentError.errorHandling(error);
+    } finally {
+      //удаляем скелетон графика
+      destroySkeleton('gd');
+    }
   },
   '/account_history=:id': async ({ data: { id } }) => {
-    setChildren(main, await isHistoryDetail(id));
-    //обновляем страницу для рендеринга графика
-    await showChartForPage(
-      {
-        id: id,
-        countMonths: 12,
-        container: 'dynamicsChart',
-      },
-      { container: 'ratioChart' }
-    );
+    try {
+      setChildren(main, await isHistoryDetail(id));
+      //лоадер-скелетон для графика
+      loaderSkeletonChart('dynamicsChart');
+      loaderSkeletonChart('ratioChart');
+      //обновляем страницу для рендеринга графика
+      await showChartForPage(
+        {
+          id: id,
+          countMonths: 12,
+          container: 'dynamicsChart',
+        },
+        { container: 'ratioChart' }
+      );
+    } catch (error) {
+      ComponentError.errorHandling(error);
+    } finally {
+      //удаляем скелетон графика
+      destroySkeleton('dynamicsChart');
+      destroySkeleton('ratioChart');
+    }
   },
   '/currency': async () => {
     setChildren(main, await isCurrency());
