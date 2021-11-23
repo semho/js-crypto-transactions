@@ -120,7 +120,7 @@ export default class Card {
   //показываем список счетов перевода прошлых транзакций
   showTransferAccounts(data) {
     //получаем массив объектов
-    const arrTransfers = JSON.parse(localStorage.getItem(data.account));
+    const arrTransfers = JSON.parse(sessionStorage.getItem(data.account));
     //если его нет, выходим
     if (arrTransfers === null) return;
     //создаем элемент список для счетов
@@ -141,7 +141,7 @@ export default class Card {
         );
       }
     });
-    //заменяем прошлый список внось сформированным
+    //заменяем прошлый список вновь сформированным
     document.querySelector('.new-transaction__list').replaceWith(list);
     //вызываем метод, который вставляет в поле ввода выбранный счет
     this.insertAccount();
@@ -178,21 +178,19 @@ export default class Card {
 
   //метод переводит средства с текущего счета на новый счет
   transferFunds(data) {
-    const errors = []; //массив для ошибок
     try {
       if (this.recipient.value === '') {
-        errors['recipient'] = 'Не введен счет получателя';
-        this.recipient.classList.add('is-invalid');
-        throw new ComponentError(errors['recipient']);
+        this.recordError(this.recipient, 'Не введен счет получателя');
       } else if (!/^(0|[1-9]\d*)$/.test(this.recipient.value)) {
-        errors['noNumber'] =
-          'В поле ввода не число, либо оно начинается с нуля';
-        this.recipient.classList.add('is-invalid');
-        throw new ComponentError(errors['noNumber']);
+        this.recordError(
+          this.recipient,
+          'В поле ввода не число, либо оно начинается с нуля'
+        );
       } else if (Number(this.amount.value) === 0 || this.amount.value === '') {
-        errors['amount'] = 'Сумма перевода не может быть ноль или пустой';
-        this.amount.classList.add('is-invalid');
-        throw new ComponentError(errors['amount']);
+        this.recordError(
+          this.amount,
+          'Сумма перевода не может быть ноль или пустой'
+        );
       } else {
         return {
           from: data.account,
@@ -204,6 +202,12 @@ export default class Card {
       ComponentError.errorHandling(error);
     }
   }
+  //метод выбрасывает ошибку выше
+  recordError(field, message) {
+    field.classList.add('is-invalid');
+    throw new ComponentError(message);
+  }
+
   //метод запрещает вводить все символы, кроме цифр
   validationKeyDown(event) {
     // Разрешаем: backspace, delete, tab и escape

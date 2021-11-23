@@ -12,22 +12,18 @@ export async function loginInToApp(login, password) {
         'Content-Type': 'application/json;charset=utf-8',
       },
       body: JSON.stringify({
-        login: 'developer',
-        password: 'skillbox',
-        // login: login,
-        // password: password,
+        // login: 'developer',
+        // password: 'skillbox',
+        login: login,
+        password: password,
       }),
     });
     if (response.ok === true) {
       const res = await response.json();
       if (res.error === 'Invalid password') {
-        errors = [];
-        errors['password'] = 'Неверный пароль';
-        throw new ComponentError('Неверный пароль');
+        await recordErrorApi('password', 'Неверный пароль');
       } else if (res.error === 'No such user') {
-        errors = [];
-        errors['login'] = 'Логин не найден';
-        throw new ComponentError('Пользователя с таким логином не существует');
+        await recordErrorApi('login', 'Пользователь не найден');
       } else {
         return res;
       }
@@ -131,25 +127,18 @@ export async function transferFoundsAccount(obj, token) {
     if (response.ok === true) {
       const res = await response.json();
       if (res.error === 'Unauthorized') {
-        errors = [];
-        errors['Unauthorized'] = 'Неавторизированный пользователь';
-        throw new ComponentError(errors['Unauthorized']);
+        await recordErrorApi('Unauthorized', 'Неавторизированный пользователь');
       } else if (res.error === 'Invalid account from') {
-        errors = [];
-        errors['InvalidAccountFrom'] = 'Не указан адрес счёта списания';
-        throw new ComponentError(errors['InvalidAccount']);
+        await recordErrorApi(
+          'InvalidAccountFrom',
+          'Не указан адрес счёта списания'
+        );
       } else if (res.error === 'Invalid account to') {
-        errors = [];
-        errors['InvalidAccountTo'] = 'Не указан счёт зачисления';
-        throw new ComponentError(errors['InvalidAccountTo']);
+        await recordErrorApi('InvalidAccountTo', 'Не указан счёт зачисления');
       } else if (res.error === 'Invalid amount') {
-        errors = [];
-        errors['InvalidAmount'] = 'Не указана сумма перевода';
-        throw new ComponentError(errors['InvalidAmount']);
+        await recordErrorApi('InvalidAmount', 'Не указана сумма перевода');
       } else if (res.error === 'Overdraft prevented') {
-        errors = [];
-        errors['OverdraftPrevented'] = 'Не хватает денег на счете';
-        throw new ComponentError(errors['OverdraftPrevented']);
+        await recordErrorApi('OverdraftPrevented', 'Не хватает денег на счете');
       } else {
         return res;
       }
@@ -159,6 +148,12 @@ export async function transferFoundsAccount(obj, token) {
   } catch (error) {
     ComponentError.errorHandling(error);
   }
+}
+//записывает ошибку в массив и выбрасывает вверх
+export async function recordErrorApi(code, message) {
+  errors = [];
+  errors[code] = message;
+  throw new ComponentError(errors[code]);
 }
 // возвращает список валютных счетов текущего пользователя
 export async function getCurrencies(token) {
@@ -226,27 +221,27 @@ export async function currencyTransfer(obj, token) {
     if (response.ok === true) {
       const res = await response.json();
       if (res.error === 'Unauthorized') {
-        errors = [];
-        errors['Unauthorized'] = 'Неавторизированный пользователь';
-        throw new ComponentError(errors['Unauthorized']);
+        await recordErrorApi('Unauthorized', 'Неавторизированный пользователь');
       } else if (res.error === 'Unknown currency code') {
-        errors = [];
-        errors['UnknownСurrencyСode'] = 'Передан неверный валютный код';
-        throw new ComponentError(errors['UnknownСurrencyСode']);
+        await recordErrorApi(
+          'UnknownСurrencyСode',
+          'Передан неверный валютный код'
+        );
       } else if (res.error === 'Invalid amount') {
-        errors = [];
-        errors['InvalidAmount'] =
-          'Не указана сумма перевода, или она отрицательная';
-        throw new ComponentError(errors['InvalidAccountTo']);
+        await recordErrorApi(
+          'InvalidAccountTo',
+          'Не указана сумма перевода, или она отрицательная'
+        );
       } else if (res.error === 'Not enough currency') {
-        errors = [];
-        errors['NotEnoughCurrency'] = 'Нет средств на счете списания';
-        throw new ComponentError(errors['InvalidAmount']);
+        await recordErrorApi(
+          'NotEnoughCurrency',
+          'Нет средств на счете списания'
+        );
       } else if (res.error === 'Overdraft prevented') {
-        errors = [];
-        errors['OverdraftPrevented'] =
-          'Попытка перевести больше, чем доступно на счёте списания';
-        throw new ComponentError(errors['OverdraftPrevented']);
+        await recordErrorApi(
+          'OverdraftPrevented',
+          'Попытка перевести больше, чем доступно на счёте списания'
+        );
       } else {
         return res;
       }

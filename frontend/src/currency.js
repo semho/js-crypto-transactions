@@ -117,29 +117,27 @@ export default class Currency {
 
   //метод возвращает объект с валютами и суммой обмена
   currencyExchange() {
-    const errors = []; //массив для ошибок
     try {
       if (Number(this.amount.value) === 0 || this.amount.value === '') {
-        errors['amount'] = 'Сумма обмена не может быть ноль или пустой';
-        this.amount.classList.add('is-invalid');
-        throw new ComponentError(errors['amount']);
+        this.recordError(
+          'Сумма обмена не может быть ноль или пустой',
+          this.amount
+        );
       } else if (!/^[0-9]*\d?(\.\d{1,2})?$/.test(this.amount.value)) {
-        errors['noNumber'] =
-          'В поле ввода суммы не число, либо оно отрицательное, либо неверный формат';
-        this.amount.classList.add('is-invalid');
-        throw new ComponentError(errors['noNumber']);
+        this.recordError(
+          'В поле ввода суммы не число, либо оно отрицательное, либо неверный формат',
+          this.amount
+        );
       } else if (
         this.selectFrom.firstChild.dataset.value === '' ||
         this.selectTo.firstChild.dataset.value === ''
       ) {
-        errors['select'] = 'Не определена валюта в селекте для обмена';
-        throw new ComponentError(errors['select']);
+        this.recordError('Не определена валюта в селекте для обмена');
       } else if (
         this.selectFrom.firstChild.dataset.value ===
         this.selectTo.firstChild.dataset.value
       ) {
-        errors['selectEquality'] = 'Валюты для обмена должны быть разными';
-        throw new ComponentError(errors['selectEquality']);
+        this.recordError('Валюты для обмена должны быть разными');
       } else {
         return {
           from: this.selectFrom.firstChild.dataset.value,
@@ -150,6 +148,12 @@ export default class Currency {
     } catch (error) {
       ComponentError.errorHandling(error);
     }
+  }
+
+  //метод выбрасывает ошибку выше
+  recordError(message, field) {
+    if (field) field.classList.add('is-invalid');
+    throw new ComponentError(message);
   }
 
   //метод запрещает вводить все символы, кроме цифр

@@ -7,3 +7,6 @@ test('Проверка на заполнение логина и пароля б
 test('Проверка не должна пропускать логин и пароль менее чем 6 символов', () => {
   expect(login.conditionHandling('aaa')).toBe(false);
 });
+test('Проверка не должна пропускать логин и пароль с пробелом в строке', () => {
+  expect(login.conditionHandling('  a a a')).toBe(false);
+});

@@ -117,7 +117,7 @@ export default class Login {
           .querySelector('.login-account__error')
           .classList.add('d-none');
         //отправляем данные поля ввода на проверку, если количество символов более 5
-        if (element.value.length > 5) {
+        if (element.value.trim().length > 5) {
           this.validationBlur(ev);
         }
       });
@@ -143,7 +143,7 @@ export default class Login {
     switch (event.target) {
       case this.login: //если передаем логин
         this.conditionHandling(
-          event.target.value,
+          event.target.value.trim(),
           event.target,
           'login',
           'Слишком короткий логин'
@@ -151,7 +151,7 @@ export default class Login {
         break;
       case this.password: //если передаем пароль
         this.conditionHandling(
-          event.target.value,
+          event.target.value.trim(),
           event.target,
           'password',
           'Слишком короткий пароль'
@@ -209,10 +209,16 @@ export default class Login {
   */
   conditionHandling(value, input, flag, message) {
     try {
-      if (value.length < 6) {
+      if (value.length < 6 && !value.includes(' ')) {
         if (input) {
           this[`${flag}Valide`] = false;
           this.recordError(input, message);
+        }
+        return false;
+      } else if (value.includes(' ')) {
+        if (input) {
+          this[`${flag}Valide`] = false;
+          this.recordError(input, 'В строке не может быть пробела!');
         }
         return false;
       } else {

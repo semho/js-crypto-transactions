@@ -6,9 +6,8 @@ import ComponentError from './error.js';
 //функция отображает график за последние countMonths месяцев на странице счета после рендеринга страницы
 export async function showChartForPage(obj, objRatio) {
   try {
-    // const data = await getAccountDetail(token, obj.id); //получаем данные текущего счета
     const data = await getAccountDetail(
-      localStorage.getItem('tokenStorage'),
+      sessionStorage.getItem('tokenStorage'),
       obj.id
     ); //получаем данные текущего счета
     if (!data) {

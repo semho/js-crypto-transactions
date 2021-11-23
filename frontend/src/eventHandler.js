@@ -19,7 +19,7 @@ export async function enterInApp(login, token, router) {
   }
   token = data.payload.token; //запизываем ответ ввиде токена в переменную
 
-  localStorage.setItem('tokenStorage', token); //записываем в локальное хранилище для отладки
+  sessionStorage.setItem('tokenStorage', token); //записываем в локальное хранилище
 
   router.navigate('/accounts'); //переходим на страницу счетов
   document.body.querySelector('.header__list').classList.remove('d-none'); //верхнее меню делаем видимым
@@ -27,8 +27,7 @@ export async function enterInApp(login, token, router) {
 
 //обработка события на добавление нового счете
 export async function addNewAccountEvent(main) {
-  // const data = await createNewAccount(token);
-  const data = await createNewAccount(localStorage.getItem('tokenStorage'));
+  const data = await createNewAccount(sessionStorage.getItem('tokenStorage'));
   if (data) setChildren(main, await isAccounts()); //обновление страницы
 }
 
@@ -46,20 +45,19 @@ export function showCardDetail(event, router) {
 //отправка новой транзакции на счет
 export async function sendTransferFunds(card, data, id) {
   const obj = card.transferFunds(data.payload);
-  // const transfer = await transferFoundsAccount(obj, token);
   const transfer = await transferFoundsAccount(
     obj,
-    localStorage.getItem('tokenStorage')
+    sessionStorage.getItem('tokenStorage')
   );
   //если есть ответ от сервера:
   if (transfer) {
-    //сохраняем в localStorage счета
+    //сохраняем в sessionStorage счета
     savingLocalAccounts(id, obj);
 
     document.querySelectorAll('input').forEach((el) => (el.value = '')); //очищаем форму ввода
-    // const data = await getAccountDetail(token, id); //получаем новые данные текущего счета
+    //получаем новые данные текущего счета
     const newData = await getAccountDetail(
-      localStorage.getItem('tokenStorage'),
+      sessionStorage.getItem('tokenStorage'),
       id
     );
     const body = card.getBodyTable(newData.payload); //отправляем новые данные для формирования таблицы
@@ -73,7 +71,7 @@ export async function sendTransferFunds(card, data, id) {
 //сохранение объекта в локальном хранилище с данными о транзакции
 function savingLocalAccounts(id, obj) {
   //если по указаному id еще нет хранилища, создаем пустой массив
-  const arrOldStorage = JSON.parse(localStorage.getItem(id)) || [];
+  const arrOldStorage = JSON.parse(sessionStorage.getItem(id)) || [];
   let flag = false;
   //перебираем его
   if (arrOldStorage.length > 0) {
@@ -88,7 +86,7 @@ function savingLocalAccounts(id, obj) {
     arrOldStorage.push(obj); //либо сразу добавляем в массив, если нет прочих объектов
   }
   //и сразу добавляем в локальное хранилище
-  localStorage.setItem(id, JSON.stringify(arrOldStorage));
+  sessionStorage.setItem(id, JSON.stringify(arrOldStorage));
 }
 
 //событие обмена валют
@@ -99,7 +97,10 @@ export async function currencyExchangeEvent(currency) {
   //очищаем поле ввода суммы обмена
   document.querySelector('input').value = '';
   //отправляем данные из интерфеса и получаем объект ответа сервера
-  const res = await currencyTransfer(obj, localStorage.getItem('tokenStorage'));
+  const res = await currencyTransfer(
+    obj,
+    sessionStorage.getItem('tokenStorage')
+  );
   if (!res) return;
   //если ответ без ошибок
   if (res.payload) {

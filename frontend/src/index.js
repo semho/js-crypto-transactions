@@ -57,8 +57,7 @@ export async function isAccounts() {
   try {
     //подставляем лоадер-скелетон
     loaderSkeletonAccounts();
-    // const data = await getAccounts(token); //получаем данные от сервера в виде массива объектов счетов
-    const data = await getAccounts(localStorage.getItem('tokenStorage')); //получаем данные от сервера в виде массива объектов счетов
+    const data = await getAccounts(sessionStorage.getItem('tokenStorage')); //получаем данные от сервера в виде массива объектов счетов
     if (!data) {
       //если нет доступа
       throw new ComponentError('Не удалось получить доступ к счетам');
@@ -85,9 +84,9 @@ export async function isAccounts() {
 //функция загружает детальную страницу счета
 async function isCard(id) {
   try {
-    // const data = await getAccountDetail(token, id); //получаем данные текущего счета
+    //получаем данные текущего счета
     const data = await getAccountDetail(
-      localStorage.getItem('tokenStorage'),
+      sessionStorage.getItem('tokenStorage'),
       id
     ); //получаем данные текущего счета
     if (!data) {
@@ -108,9 +107,9 @@ async function isCard(id) {
 //страница для подробной история счета
 async function isHistoryDetail(id) {
   try {
-    // const data = await getAccountDetail(token, id); //получаем данные текущего счета
+    //получаем данные текущего счета
     const data = await getAccountDetail(
-      localStorage.getItem('tokenStorage'),
+      sessionStorage.getItem('tokenStorage'),
       id
     ); //получаем данные текущего счета
     if (!data) {
@@ -128,13 +127,12 @@ async function isHistoryDetail(id) {
 async function isCurrency() {
   try {
     //получаем список валютных счетов текущего пользователя
-    // const dataCurrencies = await getCurrencies(token);
     const dataCurrencies = await getCurrencies(
-      localStorage.getItem('tokenStorage')
+      sessionStorage.getItem('tokenStorage')
     );
     //получаем массив всех кодов валют
     const arrAllCurrencies = await getAllCurrencies(
-      localStorage.getItem('tokenStorage')
+      sessionStorage.getItem('tokenStorage')
     );
 
     if (!dataCurrencies || !arrAllCurrencies) {
