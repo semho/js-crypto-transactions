@@ -275,7 +275,7 @@ export default class Card {
     lastTenTransactions.forEach((element) => {
       const tr = el('tr', [
         el('td', element.from),
-        el('td', element.to),
+        el('td.history-transaction__element-to', element.to),
         this.checkingTransferAmount(data, element),
         el('td', this.dateConversion(element.date)),
       ]);
