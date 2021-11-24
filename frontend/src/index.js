@@ -284,4 +284,9 @@ router.on({
   },
 });
 
+router.notFound(async () => {
+  document.body.querySelector('.header__list').classList.add('d-none');
+  setChildren(main, await isIndex());
+});
+
 router.resolve();
