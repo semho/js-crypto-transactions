@@ -121,6 +121,12 @@ export default class Login {
           this.validationBlur(ev);
         }
       });
+      //имитируем нажатие кнопкой мыши по кнопке войти клавишей ENTER
+      element.addEventListener('keydown', (ev) => {
+        if (element.value.trim().length > 5 && ev.keyCode === 13) {
+          this.getButton().click();
+        }
+      });
     });
     //флаги состояния валидации полей ввода
     this.loginValide = false;
@@ -175,6 +181,12 @@ export default class Login {
   //метод записи ошибки
   recordError(element, titleError) {
     this.showError(element);
+    //массив для записи ошибки
+    let errorsApp = [];
+    errorsApp[element.name] = titleError;
+    //показываем ошибку в приложение
+    this.showErrorApp(errorsApp);
+    //и выкидываем выше
     throw new ComponentError(`${titleError}`);
   }
   //метод отображения ошибки
@@ -233,9 +245,9 @@ export default class Login {
     }
   }
 
-  //метод отображения ошибки от API
+  //метод отображения ошибки
   /*@params {array} errors массив с ключ-значение ошибки*/
-  showErrorApi(errors) {
+  showErrorApp(errors) {
     if (errors['login']) {
       this.hiddenErrorLogin.textContent = errors['login'];
       this.hiddenErrorLogin.classList.remove('d-none');

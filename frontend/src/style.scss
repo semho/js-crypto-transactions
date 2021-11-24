@@ -456,10 +456,15 @@ input::-webkit-inner-spin-button {
       text-align: end;
     }
 
+    &__col--p0 {
+      padding-right: 0;
+      padding-left: 0;
+    }
+
     &__list {
       position: absolute;
       padding: 9px 10px 9px 16px;
-      width: 300px;
+      width: 100%;
       border: 1px solid $colorBorder;
       border-bottom-left-radius: 7px;
       border-bottom-right-radius: 7px;
@@ -613,6 +618,14 @@ input::-webkit-inner-spin-button {
     &__btn {
       @include btnStyles();
       border-radius: 15px;
+    }
+  }
+
+  .history-transaction {
+    &__tbody {
+      & tr {
+        cursor: auto;
+      }
     }
   }
 }

@@ -14,7 +14,7 @@ import { isAccounts } from './index.js';
 export async function enterInApp(login, token, router) {
   const data = await loginInToApp(login.getLogin(), login.getPassword()); //получаем ответ от сервера
   if (!data) {
-    login.showErrorApi(showError()); //отображаем ошибки от сервера
+    login.showErrorApp(showError()); //отображаем ошибки от сервера
     return; //если ответа нет, выпадает ошибка
   }
   token = data.payload.token; //запизываем ответ ввиде токена в переменную
@@ -39,7 +39,7 @@ export function showCardDetail(event, router) {
   if (!btn || !btn.contains(btn)) return;
   const id =
     btn.parentElement.previousElementSibling.previousElementSibling.textContent;
-  router.navigate(`/account_id=${id}`); //переходим на страницу счета
+  router.navigate(`/account/${id}`); //переходим на страницу счета
 }
 
 //отправка новой транзакции на счет

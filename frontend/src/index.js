@@ -27,13 +27,17 @@ import { showChartForPage } from './charts.js'; //библиотека граф�
 import History from './history.js'; //подключаем класс для отображения подробной истории счета
 import Currency from './currency.js'; //класс для отображения валютных операций
 import Map from './map.js'; //класс для отображения карты с банкоматами
-
-const router = new Navigo('/'); //роутинг
-const main = el('main'); //контент
+//роутинг
+const router = new Navigo('/');
+//секция с картой. Выносим отдельно в секцию и скрываем на всех страницах кроме карты, чтобы при каждом роутинге ее не подгружать
+const sectionMap = el('section.content-map.d-none', await isMap());
+//секция с главным контентом
+const section = el('section.content');
 let token = null; //переменная в памяти для токена
-
+//хедер сайта статичен от страницы к странице и потому тоже выносим в отдельный элемент
 const header = new Header();
-setChildren(document.body, [header, main]); //создаем DOM дерево
+//создаем DOM дерево
+setChildren(document.body, [header, el('main', [sectionMap, section])]);
 
 //функция загружает индексную страницу
 async function isIndex() {
@@ -46,7 +50,7 @@ async function isIndex() {
       await enterInApp(login, token, router);
     });
 
-    return el('section.section-login.login-account', login);
+    return el('div.section-login.login-account', login);
   } catch (error) {
     ComponentError.errorHandling(error);
   }
@@ -66,7 +70,7 @@ export async function isAccounts() {
     const btn = accounts.getButtonAddAccount(); //кнопка добавления счета
     btn.addEventListener('click', async () => {
       //событие на добавление нового счета
-      await addNewAccountEvent(main);
+      await addNewAccountEvent(section);
     });
     //получаем контейнер со всеми счетами
     const containerCards = accounts.getContainerAllCards();
@@ -75,7 +79,7 @@ export async function isAccounts() {
       showCardDetail(event, router)
     );
 
-    return el('section.section-accounts.accounts', accounts);
+    return el('div.section-accounts.accounts', accounts);
   } catch (error) {
     ComponentError.errorHandling(error);
   }
@@ -98,7 +102,7 @@ async function isCard(id) {
     card.getBtnSend().addEventListener('click', async () => {
       await sendTransferFunds(card, data, id);
     });
-    return el('section.section-account-card.account-card', card);
+    return el('div.section-account-card.account-card', card);
   } catch (error) {
     ComponentError.errorHandling(error);
   }
@@ -117,7 +121,7 @@ async function isHistoryDetail(id) {
       throw new ComponentError('Не удалось получить доступ к данному счету');
     }
     const history = new History(data.payload); //отображаем данные на странице
-    return el('section.section-account-history.account-history', history);
+    return el('div.section-account-history.account-history', history);
   } catch (error) {
     ComponentError.errorHandling(error);
   }
@@ -165,11 +169,12 @@ async function isCurrency() {
           'WebSocket закрыл соединение';
     });
 
-    return el('section.section-currency.currency', currency);
+    return el('div.section-currency.currency', currency);
   } catch (error) {
     ComponentError.errorHandling(error);
   }
 }
+
 //функция отображает страницу карты
 async function isMap() {
   try {
@@ -179,7 +184,7 @@ async function isMap() {
     //вызываем новый экземпляр объекта класса Map и передаем координаты
     const map = new Map(coordinates.payload);
 
-    return el('section.section-map.map', map);
+    return el('div.section-map.map', map);
   } catch (error) {
     ComponentError.errorHandling(error);
   }
@@ -189,7 +194,7 @@ async function isMap() {
 function moveHistoryAccount(selector, id) {
   document
     .querySelector(selector)
-    .addEventListener('click', () => router.navigate(`/account_history=${id}`));
+    .addEventListener('click', () => router.navigate(`/account_history/${id}`));
 }
 
 //функция добавляет класс кнопке активной страницы
@@ -199,6 +204,12 @@ function pageActive(number) {
     element.classList.remove('is-active');
   });
   list[number].classList.add('is-active');
+
+  if (number !== 0) {
+    sectionMap.classList.add('d-none');
+  } else {
+    sectionMap.classList.remove('d-none');
+  }
 }
 //функция лоадер-скелетон
 function loaderSkeletonAccounts() {
@@ -211,7 +222,7 @@ function loaderSkeletonAccounts() {
     ]),
   ]);
 
-  setChildren(main, container);
+  setChildren(section, container);
 }
 //функция добавления скелетона графика
 function loaderSkeletonChart(id) {
@@ -228,19 +239,20 @@ router.on({
   '/': async () => {
     // localStorage.clear();
     document.body.querySelector('.header__list').classList.add('d-none');
-    setChildren(main, await isIndex());
+    setChildren(section, await isIndex());
+    pageActive(3);
   },
   '/ATMs': async () => {
-    setChildren(main, await isMap());
+    setChildren(section, '');
     pageActive(0);
   },
   '/accounts': async () => {
-    setChildren(main, await isAccounts());
+    setChildren(section, await isAccounts());
     pageActive(1);
   },
-  '/account_id=:id': async ({ data: { id } }) => {
+  '/account/:id': async ({ data: { id } }) => {
     try {
-      setChildren(main, await isCard(id));
+      setChildren(section, await isCard(id));
       //лоадер-скелетон для графика
       loaderSkeletonChart('gd');
       //обновляем страницу для рендеринга графика
@@ -255,9 +267,9 @@ router.on({
       destroySkeleton('gd');
     }
   },
-  '/account_history=:id': async ({ data: { id } }) => {
+  '/account_history/:id': async ({ data: { id } }) => {
     try {
-      setChildren(main, await isHistoryDetail(id));
+      setChildren(section, await isHistoryDetail(id));
       //лоадер-скелетон для графика
       loaderSkeletonChart('dynamicsChart');
       loaderSkeletonChart('ratioChart');
@@ -279,7 +291,7 @@ router.on({
     }
   },
   '/currency': async () => {
-    setChildren(main, await isCurrency());
+    setChildren(section, await isCurrency());
     pageActive(2);
   },
 });

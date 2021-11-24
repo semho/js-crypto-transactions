@@ -43,19 +43,22 @@ export default class Card {
                     'Номер счета получателя'
                   ))
                 )),
-                (this.subdiv = el('.new-transaction__col.col-sm-7', [
-                  (this.recipient = el('input.new-transaction__input', {
-                    type: 'text',
-                    id: 'inputRecipient',
-                    placeholder: 'Введите счет',
-                    name: 'recipient',
-                    autocomplete: 'off',
-                  })),
-                  (this.containerList = el(
-                    '.new-transaction__container-list',
-                    (this.list = el('ul.new-transaction__list.d-none'))
-                  )),
-                ])),
+                (this.subdiv = el(
+                  '.new-transaction__col.col-sm-7.new-transaction__col--p0',
+                  [
+                    (this.recipient = el('input.new-transaction__input', {
+                      type: 'text',
+                      id: 'inputRecipient',
+                      placeholder: 'Введите счет',
+                      name: 'recipient',
+                      autocomplete: 'off',
+                    })),
+                    (this.containerList = el(
+                      '.new-transaction__container-list',
+                      (this.list = el('ul.new-transaction__list.d-none'))
+                    )),
+                  ]
+                )),
               ])),
               (this.div = el('.new-transaction__row.row.align-items-center', [
                 (this.subdiv = el(
@@ -67,7 +70,7 @@ export default class Card {
                   ))
                 )),
                 (this.subdiv = el(
-                  '.new-transaction__col.col-sm-7',
+                  '.new-transaction__col.col-sm-7.new-transaction__col--p0',
                   (this.amount = el('input.new-transaction__input', {
                     type: 'number',
                     id: 'inputAmount',

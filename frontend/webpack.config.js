@@ -11,6 +11,9 @@ module.exports = (env) => ({
     filename: './js/main.[contenthash].js',
     // publicPath: '/',
   },
+  experiments: {
+    topLevelAwait: true,
+  },
   module: {
     rules: [
       {
