@@ -1,8 +1,17 @@
 import 'babel-polyfill';
-import { el } from 'redom';
+import { el, setChildren } from 'redom';
 import icoBack from './assets/images/coolicon.svg';
 import icoSend from './assets/images/mail.svg';
 import ComponentError from './error.js';
+import valid from 'card-validator';
+//импортируем логотипы карт
+import mir from './assets/images/mir.svg';
+import visa from './assets/images/visa.svg';
+import mastercard from './assets/images/mastercard.svg';
+import maestro from './assets/images/maestro.svg';
+import jcb from './assets/images/jcb.svg';
+import discover from './assets/images/discover.svg';
+import american from './assets/images/american-express.svg';
 
 export default class Card {
   constructor(data) {
@@ -34,6 +43,7 @@ export default class Card {
             '.account-card__new-transaction.new-transaction',
             (this.form = el('form.new-transaction__form', [
               (this.title = el('h3.new-transaction__title', 'Новый перевод')),
+              (this.logoWrapper = el('.new-transaction__logo-wrapper')),
               (this.div = el('.new-transaction__row.row.align-items-center', [
                 (this.subdiv = el(
                   '.new-transaction__col.col-sm-5',
@@ -116,9 +126,48 @@ export default class Card {
       ); //убираем класс указывающий на ошибку
     });
     //обработчик событий на поле ввода счета
-    this.recipient.addEventListener('input', () => {
+    this.recipient.addEventListener('input', (ev) => {
+      //показываем список известных счетов, если в поле ввода первый символ начинается с них
       this.showTransferAccounts(data);
+      //показываем тип карты
+      this.showCardType(ev);
     });
+  }
+  //валидируем тип банковской карты
+  showCardType(ev) {
+    //получаем лого
+    const logo = this.getLogoCardType(ev.target.value, 'new-transaction__logo');
+    //если есть логотип, вставляем в контейнер
+    if (logo) {
+      setChildren(this.logoWrapper, logo);
+    } else {
+      //иначе удаляем, если уже была картинка
+      if (this.logoWrapper.firstChild) {
+        this.logoWrapper.firstChild.remove();
+      }
+    }
+  }
+
+  //метод получения пути к лого кредитной карты
+  getSrcImg(typeCard) {
+    switch (typeCard) {
+      case 'mir':
+        return mir;
+      case 'visa':
+        return visa;
+      case 'mastercard':
+        return mastercard;
+      case 'maestro':
+        return maestro;
+      case 'jcb':
+        return jcb;
+      case 'discover':
+        return discover;
+      case 'american-express':
+        return american;
+      default:
+        break;
+    }
   }
   //показываем список счетов перевода прошлых транзакций
   showTransferAccounts(data) {
@@ -184,11 +233,8 @@ export default class Card {
     try {
       if (this.recipient.value === '') {
         this.recordError(this.recipient, 'Не введен счет получателя');
-      } else if (!/^(0|[1-9]\d*)$/.test(this.recipient.value)) {
-        this.recordError(
-          this.recipient,
-          'В поле ввода не число, либо оно начинается с нуля'
-        );
+      } else if (!/^([0-9]\d*)$/.test(this.recipient.value)) {
+        this.recordError(this.recipient, 'В поле ввода не число');
       } else if (Number(this.amount.value) === 0 || this.amount.value === '') {
         this.recordError(
           this.amount,
@@ -267,6 +313,25 @@ export default class Card {
       ]),
     ]);
   }
+  //возвращает img с валидным логотипом карты
+  getLogoCardType(number, className) {
+    const numberValidator = valid.number(number);
+    //если есть объект
+    if (numberValidator.card) {
+      //тип карты
+      const typeCard = numberValidator.card.type;
+      //создаем элемент логотипа
+      const logo = el(`img.${className}`, {
+        src: this.getSrcImg(typeCard),
+      });
+      //проверка на содержание пути к логотипу
+      const pathImg = /\.(svg)$/i.test(logo.src);
+      //если путь есть, то картинку возвращаем
+      if (pathImg) {
+        return logo;
+      }
+    }
+  }
   //возвращаем тело таблицы
   getBodyTable(data) {
     //получаем отсортированный массив
@@ -276,9 +341,12 @@ export default class Card {
     //подставляем значения в тело таблицы
     const tbody = el('tbody.history-transaction__tbody');
     lastTenTransactions.forEach((element) => {
+      //получаем логотип кредитной карты в виде элемента изображения
+      const img = this.getLogoCardType(element.to, 'history-transaction__logo');
+      //и подставляем в формирующуюся строку
       const tr = el('tr', [
         el('td', element.from),
-        el('td.history-transaction__element-to', element.to),
+        el('td.history-transaction__element-to', [element.to, img]),
         this.checkingTransferAmount(data, element),
         el('td', this.dateConversion(element.date)),
       ]);

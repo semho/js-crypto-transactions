@@ -464,6 +464,18 @@ input::-webkit-inner-spin-button {
     max-width: 606px;
     background-color: $backgroundColorLogin;
     border-radius: 50px;
+    &__form {
+      position: relative;
+    }
+
+    &__logo-wrapper {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 70px;
+      height: auto;
+    }
+
     &__title {
       @include subTitle();
       margin-bottom: 25px;
@@ -549,6 +561,9 @@ input::-webkit-inner-spin-button {
     margin-bottom: 31px;
     background-color: $backgroundColorLogin;
     border-radius: 56px;
+    &__logo {
+      width: 40px;
+    }
 
     &__title {
       @include subTitle();
@@ -1004,6 +1019,16 @@ input::-webkit-inner-spin-button {
     .new-transaction {
       max-width: 100%;
     }
+
+    .history-transaction {
+      &__element-to {
+        position: relative;
+      }
+
+      &__logo {
+        position: absolute;
+      }
+    }
   }
 
   /*---------- account-history -------*/
@@ -1027,6 +1052,7 @@ input::-webkit-inner-spin-button {
       }
     }
   }
+
   /*------- carrency -------*/
   .currency {
     &__bottom--exchange {
@@ -1455,6 +1481,11 @@ input::-webkit-inner-spin-button {
       &__thead th, &__tbody tr td {
         padding-left: 30px;
       }
+
+      &__logo {
+        width: 30px;
+      }
+
     }
 
     .history-transaction {
@@ -1651,12 +1682,22 @@ input::-webkit-inner-spin-button {
         padding: 6px 10px 6px 16px;
         font-size: 10px;
       }
+
+      &__logo-wrapper {
+        width: 50px;
+      }
+
     }
 
     .history-transaction {
       padding: 20px 0;
       &__title {
         padding-left: 20px;
+      }
+
+      &__logo {
+        top: 10px;
+        right: -15px;
       }
     }
 
