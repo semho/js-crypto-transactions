@@ -12,9 +12,12 @@ import { isAccounts } from './index.js';
 
 //обработка события входа в приложение
 export async function enterInApp(login, token, router) {
+  //делаем кнопку не активной пока ждем ответ от сервера
+  login.getButton().setAttribute('disabled', true);
   const data = await loginInToApp(login.getLogin(), login.getPassword()); //получаем ответ от сервера
   if (!data) {
     login.showErrorApp(showError()); //отображаем ошибки от сервера
+    login.getButton().removeAttribute('disabled'); //активируем кнопку
     return; //если ответа нет, выпадает ошибка
   }
   token = data.payload.token; //запизываем ответ ввиде токена в переменную
@@ -23,6 +26,7 @@ export async function enterInApp(login, token, router) {
 
   router.navigate('/accounts'); //переходим на страницу счетов
   document.body.querySelector('.header__list').classList.remove('d-none'); //верхнее меню делаем видимым
+  document.body.querySelector('.burger').classList.remove('d-none');
 }
 
 //обработка события на добавление нового счете

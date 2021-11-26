@@ -13,14 +13,31 @@ export default class Currency {
         (this.el = el('span.currency__title', 'Валютный обмен'))
       )),
       (this.bottom = el('.currency__bottom', [
-        (this.leftWrapper = el('.currency__left-wrapper', [
+        (this.leftWrapper = el(
+          '.currency__left-wrapper',
           (this.currencies = el('.currency__currencies.currencies', [
             (this.title = el('.currencies__title', 'Ваши валюты')),
             (this.currenciesWrapper = el(
               '.currencies__wrapper',
               this.getListCurrencies(dataCurrencies)
             )),
-          ])),
+          ]))
+        )),
+        (this.rightWrapper = el(
+          '.currency__right-wrapper.course-change',
+          (this.box = el('.course-change__box', [
+            (this.title = el(
+              '.course-change__title',
+              'Изменение курсов в реальном времени'
+            )),
+            (this.courseChangeList = el('ul.course-change__list')),
+          ]))
+        )),
+      ])),
+      (this.bottom = el(
+        '.currency__bottom.currency__bottom--exchange',
+        (this.leftWrapper = el(
+          '.currency__left-wrapper.currency__left-wrapper--exchange',
           (this.exchange = el('.currency__exchange.exchange', [
             (this.title = el('.exchange__title', 'Обмен валюты')),
             (this.exchangeWrapper = el('.exchange__wrapper', [
@@ -84,19 +101,9 @@ export default class Currency {
                 )),
               ])),
             ])),
-          ])),
-        ])),
-        (this.rightWrapper = el(
-          '.currency__right-wrapper.course-change',
-          (this.box = el('.course-change__box', [
-            (this.title = el(
-              '.course-change__title',
-              'Изменение курсов в реальном времени'
-            )),
-            (this.courseChangeList = el('ul.course-change__list')),
           ]))
-        )),
-      ])),
+        ))
+      )),
     ]);
     //запрещаем вводить все символы, кроме цифр в поле водда суммы
     this.amount.addEventListener('keydown', (ev) => this.validationKeyDown(ev));

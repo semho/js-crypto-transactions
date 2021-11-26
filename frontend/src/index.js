@@ -1,6 +1,6 @@
 import 'babel-polyfill'; //подключаем полифил для того, чтобы любой браузер понимал
 import Navigo from 'navigo';
-import { el, setChildren } from 'redom';
+import { el, mount, setChildren } from 'redom';
 import ComponentError from './error.js';
 import './style.scss';
 import Header from './header.js'; //шапка
@@ -30,7 +30,7 @@ import Map from './map.js'; //класс для отображения карт�
 //роутинг
 const router = new Navigo('/');
 //секция с картой. Выносим отдельно в секцию и скрываем на всех страницах кроме карты, чтобы при каждом роутинге ее не подгружать
-const sectionMap = el('section.content-map.d-none', await isMap());
+const sectionMap = el('section.content-map.d-none');
 //секция с главным контентом
 const section = el('section.content');
 let token = null; //переменная в памяти для токена
@@ -38,6 +38,9 @@ let token = null; //переменная в памяти для токена
 const header = new Header();
 //создаем DOM дерево
 setChildren(document.body, [header, el('main', [sectionMap, section])]);
+if ((await isMap()) !== 'undefined') {
+  mount(sectionMap, await isMap());
+}
 
 //функция загружает индексную страницу
 async function isIndex() {
@@ -177,17 +180,13 @@ async function isCurrency() {
 
 //функция отображает страницу карты
 async function isMap() {
-  try {
-    //запрос к серверу на получение координат банкоматов
-    const coordinates = await getCoordinates();
-    if (!coordinates) return;
-    //вызываем новый экземпляр объекта класса Map и передаем координаты
-    const map = new Map(coordinates.payload);
+  //запрос к серверу на получение координат банкоматов
+  const coordinates = await getCoordinates();
+  if (!coordinates) return;
+  //вызываем новый экземпляр объекта класса Map и передаем координаты
+  const map = new Map(coordinates.payload);
 
-    return el('div.section-map.map', map);
-  } catch (error) {
-    ComponentError.errorHandling(error);
-  }
+  return el('div.section-map.map', map);
 }
 
 //переход к детальной странице истории счета
@@ -239,6 +238,7 @@ router.on({
   '/': async () => {
     // localStorage.clear();
     document.body.querySelector('.header__list').classList.add('d-none');
+    document.body.querySelector('.burger').classList.add('d-none');
     setChildren(section, await isIndex());
     pageActive(3);
   },

@@ -138,8 +138,24 @@ input::-webkit-inner-spin-button {
     }
   }
 
+  .burger {
+    position: relative;
+    display: none;
+    margin-top: 22px;
+    width: 2.5em;
+    height: 1.6em;
+    border-top: 0.2em solid #fff;
+    border-bottom: 0.2em solid #fff;
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0.5em;
+      left: 0px;
+      width: 100%;
+      border-top: 0.2em solid #fff;
+    }
+  }
 }
-
 /*----- form login ------*/
 .login-account {
   &__wrapper {
@@ -217,6 +233,7 @@ input::-webkit-inner-spin-button {
     @include btnStyles();
   }
 }
+
 /*------- accounts ---------*/
 .accounts {
   padding-top: $paddingTopContent;
@@ -377,6 +394,8 @@ input::-webkit-inner-spin-button {
 
   }
 }
+
+
 /*------- account-card and accound history---------*/
 .account-card, .account-history {
   padding-top: $paddingTopContent;
@@ -456,7 +475,7 @@ input::-webkit-inner-spin-button {
       text-align: end;
     }
 
-    &__col--p0 {
+    &__col--p0, &__col-btn {
       padding-right: 0;
       padding-left: 0;
     }
@@ -597,6 +616,7 @@ input::-webkit-inner-spin-button {
 
   }
 }
+
 /*------- only account-history -------*/
 .account-history {
   .chart {
@@ -638,7 +658,6 @@ input::-webkit-inner-spin-button {
   }
 
   &__title {
-    margin-right: 35px;
     font-family: $fontWS, 'Segoe UI', Arial, Helvetica, sans-serif;
     font-weight: bold;
     font-size: 34px;
@@ -743,6 +762,7 @@ input::-webkit-inner-spin-button {
         margin-bottom: 0;
         &::after {
           bottom: 15px;
+          right: 13px;
         }
         &.is-active-select::after {
           bottom: 20px;
@@ -928,3 +948,798 @@ input::-webkit-inner-spin-button {
 
   animation: fade 1s linear infinite alternate;
 }
+/*---------- block with error -----------*/
+.block-with-error {
+  position:absolute;
+  padding: 2rem;
+  bottom: 2%;
+  right: 5%;
+  border-radius: 20px;
+  background-color: $backgroundColorLogin;
+  box-shadow: $boxShadow;
+
+  h3 {
+    margin-bottom: 0;
+    font-family: "Work Sans", "Segoe UI", Arial, Helvetica, sans-serif;
+    font-weight: 500;
+    font-size: 34px;
+    line-height: 40px;
+    letter-spacing: 0.76px;
+    color: $colorTitle;
+  }
+}
+.block-with-error-app {
+  position:fixed;
+  padding: 2rem;
+  top: 15%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, 0);
+  border-radius: 20px;
+  background-color: $backgroundColorBoxError;
+
+  box-shadow: $boxShadowError;
+  z-index: 99;
+
+  h3 {
+    margin-bottom: 0;
+    font-family: "Work Sans", "Segoe UI", Arial, Helvetica, sans-serif;
+    font-weight: 500;
+    font-size: 34px;
+    line-height: 40px;
+    letter-spacing: 0.76px;
+    color: $colorTitle;
+  }
+}
+
+/*------ media --------*/
+@media (max-width: 1470px) {
+  /*---------- account-card -------*/
+  .account-card {
+    .chart {
+      width: 100%;
+      height: 100%;
+    }
+
+    .new-transaction {
+      max-width: 100%;
+    }
+  }
+
+  /*---------- account-history -------*/
+  .account-history {
+    .chart {
+      padding: 25px 50px;
+    }
+  }
+}
+
+@media (max-width: 1199px) {
+  /*-------- accounts -------*/
+  .accounts {
+    &__card.card{
+      width: 48%;
+      &:not(:nth-child(3n)) {
+        margin-right: 0;
+      }
+      &:not(:nth-child(2n)) {
+        margin-right: 4%;
+      }
+    }
+  }
+  /*------- carrency -------*/
+  .currency {
+    &__bottom--exchange {
+      justify-content: center;
+    }
+
+    &__left-wrapper--exchange {
+      width: 60%;
+    }
+  }
+}
+
+@media (max-width: 991px) {
+  /*-------- accounts -------*/
+  .accounts {
+   &__top {
+     flex-wrap: wrap;
+   }
+
+   &__select-wrapper {
+    margin-bottom: 10px;
+   }
+
+   &__select-title {
+     font-size: 30px;
+   }
+  }
+  /*-------- account-card -------*/
+  .account-card, .account-history, .currency {
+    &__info {
+      align-items: center;
+    }
+
+    &__title {
+        font-size: 30px;
+    }
+
+    &__number {
+      font-size: 28px;
+    }
+
+    &__view {
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: center;
+    }
+
+    .history-transaction {
+      overflow-x: auto;
+    }
+
+    .paginations {
+      &__list {
+        grid-template-columns: repeat(auto-fit, 40px);
+      }
+
+      &__btn {
+        padding: 10px 20px;
+        font-size: 12px;
+        border-radius: 10px;
+      }
+    }
+  }
+  /*--------- currency ------*/
+  .currency {
+    &__left-wrapper--exchange {
+      width: 100%;
+    }
+  }
+  /*--------- map -----------*/
+  .map {
+    &__title {
+      font-size: 30px;
+    }
+
+  }
+  /*------- block with error -------*/
+  .block-with-error-app, .block-with-error {
+    padding: 1rem;
+    h3 {
+      font-size: 24px;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  /*-------- header ---------*/
+  .header {
+    .burger {
+      display: block;
+    }
+
+    &__list {
+      position: absolute;
+      flex-direction: column;
+      justify-content: start;
+      max-height: 0;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: $colorMain;
+      overflow: hidden;
+      transform: translateY(100px);
+      z-index: 99;
+
+    }
+
+    &__list.is-active {
+      max-height: 222px;
+      padding: 15px 0;
+      transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out;
+    }
+
+    &__item:not(:last-child) {
+      margin-right: 0;
+    }
+
+    &__btn {
+      padding-left: 5%;
+      width: 100%;
+      border-radius: 0;
+      border: none;
+      text-align: start;
+    }
+  }
+  /*-------- accounts -------*/
+  .accounts, .currency {
+    &__select-title, &__title {
+      font-size: 30px;
+    }
+
+    &__btn {
+      padding: 10px 22px;
+      font-size: 12px;
+    }
+
+    &__img {
+      margin-right: 10px;
+      width: 12px;
+      height: 14px;
+    }
+
+    .card {
+      margin-bottom: 25px;
+      &__title {
+        font-size: 2.2vw;
+      }
+
+      &__balance {
+        font-size: 1.8vw;
+      }
+
+      &__title-transaction, &__date-transaction {
+        font-size: 1.6vw;
+      }
+
+      &__btn {
+        padding: 10px 22px;
+        font-size: 1.8vw;
+      }
+    }
+  }
+  /*-------- account-card -------*/
+  .account-card, .account-history {
+    &__btn {
+      padding: 10px 22px;
+      font-size: 12px;
+    }
+
+    &__img {
+      margin-right: 10px;
+      width: 12px;
+      height: 14px;
+    }
+
+    &__number {
+      font-size: 3.7vw;
+    }
+
+    &__balance {
+      font-size: 2.6vw;
+    }
+
+    &__balance-name {
+      margin-right: 22px;
+    }
+
+    .chart {
+      &__title {
+        font-size: 2.8vw;
+      }
+    }
+
+    .new-transaction {
+      &__title {
+        font-size: 2.8vw;
+      }
+
+      &__label {
+        font-size: 2.2vw;
+      }
+
+      &__btn {
+        padding: 10px 22px;
+        font-size: 12px;
+      }
+
+      &__img {
+        margin-right: 10px;
+        width: 12px;
+        height: 14px;
+      }
+
+      &__col-btn {
+        margin-left: 0;
+        padding-right: 0;
+        width: 100%;
+        text-align: end;
+      }
+    }
+
+    .history-transaction  {
+      padding-left: 30px;
+
+      &__title {
+        padding-left: 30px;
+      }
+
+      &__title, &__thead th {
+        font-size: 2.8vw;
+      }
+
+      &__thead th, &__tbody tr td {
+        padding-left: 30px;
+      }
+    }
+
+    .paginations {
+      &__list {
+        grid-template-columns: repeat(auto-fit, 28px);
+      }
+
+      &__btn {
+        padding: 8px 14px;
+        font-size: 12px;
+        border-radius: 8px;
+      }
+    }
+  }
+
+  .account-card .chart .xtick text, .account-card .chart .ytick text, .account-history .chart .xtick text, .account-history .chart .ytick text {
+    font-size: 16px !important;
+  }
+   /*------- currency ------*/
+  .currency {
+    &__bottom {
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    &__left-wrapper, .course-change {
+      width: 100%;
+    }
+  }
+   /*------- block with error -------*/
+   .block-with-error-app, .block-with-error {
+    padding: 1rem;
+    h3 {
+      font-size: 20px;
+    }
+  }
+}
+
+@media (max-width: 575px) {
+  /*------- login -------*/
+  .login-account {
+    &__wrapper {
+      padding-top: 30px;
+      padding-bottom: 30px;
+      width: 90vw;
+      height: auto;
+    }
+
+    &__form {
+      padding-left: 20%;
+    }
+
+    &__title {
+      padding-left: 0;
+      margin-bottom: 5px;
+      font-size: 28px;
+      line-height: 30px;
+    }
+
+    &__row {
+      margin-bottom: 5px;
+    }
+
+    &__row--2 {
+      margin-bottom: 20px;
+    }
+
+    &__col--3, &__col--1 {
+      padding-left: 0;
+    }
+
+    &__input {
+      width: 80%;
+    }
+
+    &__col--error, &__col--success {
+      display: none;
+    }
+
+    &__error {
+      font-size: 12px;
+    }
+  }
+  /*-------- accounts -------*/
+  .accounts {
+    &__select-wrapper {
+      flex-wrap: wrap;
+    }
+
+    &__select, &__select-box {
+      width: 100%;
+    }
+
+    &__card.card{
+      width: 100%;
+      &:not(:nth-child(3n)) {
+        margin-right: 0;
+      }
+      &:not(:nth-child(2n)) {
+        margin-right: 0;
+      }
+    }
+
+    .card {
+      margin-bottom: 15px;
+      &__title {
+        font-size: 14px;
+      }
+
+      &__balance {
+        font-size: 12px;
+      }
+
+      &__title-transaction, &__date-transaction {
+        font-size: 11px;
+      }
+
+      &__btn {
+        font-size: 12px;
+      }
+    }
+  }
+  /*-------- account-card -------*/
+  .account-card, .account-history, .currency {
+    &__top, &__info {
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    &__title {
+      font-size: 30px;
+    }
+
+    &__number {
+      font-size: 18px;
+    }
+
+    &__balance {
+      font-size: 16px;
+    }
+
+    .chart {
+      padding: 15px 0 15px 30px;
+      border-radius: 20px;
+      &__title {
+        font-size: 16px;
+      }
+    }
+
+    .new-transaction {
+      padding: 15px 25px 15px 25px;
+      border-radius: 20px;
+      &__title {
+        margin-bottom: 10px;
+        font-size: 16px;
+      }
+
+      &__col {
+        margin-bottom: 0;
+        text-align: start;
+      }
+
+      &__label {
+        font-size: 14px;
+      }
+
+      &__btn {
+        margin-top: 10px;
+      }
+    }
+
+    .history-transaction  {
+      border-radius: 20px;
+      &__title {
+        margin-bottom: 15px;
+      }
+
+      &__title, &__thead th {
+        font-size: 16px;
+      }
+
+      &__thead {
+        height: 50px;
+      }
+
+      &__tbody tr {
+        height: 50px;
+        font-size: 12px;
+      }
+
+      &__thead th, &__tbody tr td {
+        padding-left: 30px;
+      }
+    }
+
+    .history-transaction {
+      padding: 20px 0;
+      &__title {
+        padding-left: 30px;
+      }
+    }
+
+    .paginations {
+      &__list {
+        grid-template-columns: repeat(auto-fit, 10px);
+      }
+
+      &__btn {
+        padding: 3px 8px;
+        font-size: 10px;
+        border-radius: 6px;
+        font-weight: 400;
+      }
+    }
+
+    .account-history {
+      &__chart {
+        margin-bottom: 30px;
+      }
+    }
+  }
+   /*------- currency ------*/
+   .currency {
+    .currencies, .exchange {
+      padding: 25px;
+      border-radius: 20px;
+
+      &__title, &__item:not(:last-child) {
+        margin-bottom: 15px;
+      }
+
+      &__title, &__code, &__amount {
+        font-size: 16px;
+      }
+
+      &__firstRow {
+        margin-bottom: 0;
+        .col-sm-1 {
+          width: 10%;
+        }
+
+        .col-sm-5 {
+          width: 90%;
+          margin-bottom: 15px;
+        }
+      }
+
+      &__input--amount {
+        margin-bottom: 15px;
+      }
+
+      &__btn {
+        padding: 10px 22px;
+        font-size: 12px;
+      }
+    }
+
+    .course-change {
+      &__box {
+        padding: 25px;
+         border-radius: 20px;
+      }
+
+      &__title, &__item:not(:last-child) {
+        margin-bottom: 15px;
+      }
+
+      &__title, &__item {
+        font-size: 16px;
+      }
+    }
+   }
+
+  /*--------- map -----------*/
+  .map {
+    &__top {
+      margin-bottom: 20px;
+    }
+
+  }
+
+  /*------- block with error -------*/
+  .block-with-error-app, .block-with-error {
+    h3 {
+      font-size: 20px;
+      line-height: 20px;
+    }
+  }
+}
+@media (min-width: 576px) {
+  /*------- login -------*/
+  .login-account {
+    &__form {
+      padding-left: 0;
+    }
+  }
+}
+
+@media (max-width: 320px) {
+  /*------- login -------*/
+  .login-account {
+    &__title {
+      font-size: 24px;
+    }
+  }
+  /*---------- accounts -----------*/
+  .accounts, .account-card, .account-history, .currency {
+    padding-top: 30px;
+    &__select-link {
+      padding-right: 15px;
+      line-height: 18px;
+      font-size: 14px;
+      &::after {
+        bottom: 15px;
+      }
+    }
+
+    &__select-option {
+      line-height: 18px;
+      font-size: 14px;
+    }
+
+    &__select-title, &__title {
+      font-size: 24px;
+    }
+
+    &__top {
+      margin-bottom: 20px;
+    }
+
+    .card {
+      &__title {
+        font-size: 12px;
+      }
+
+      &__balance {
+        font-size: 10px;
+      }
+
+      &__title-transaction, &__date-transaction {
+        font-size: 9px;
+      }
+
+      &__btn {
+        font-size: 10px;
+      }
+    }
+  }
+  /*-------- account-card -------*/
+  .account-card, .account-history {
+    &__number {
+      font-size: 15px;
+    }
+
+    &__balance-name {
+      font-size: 14px;
+    }
+
+    &__balance-price {
+      font-size: 13px;
+    }
+
+    &__view {
+      margin-bottom: 30px;
+    }
+
+    .chart, .new-transaction, .history-transaction {
+      &__title, &__thead th {
+        font-size: 14px;
+      }
+
+      &__thead th, &__tbody tr td {
+        padding-left: 20px;
+      }
+
+      &__label, &__input {
+        font-size: 13px;
+        line-height: 18px;
+      }
+
+      &__thead, &__tbody tr {
+        height: 40px;
+        font-size: 11px;
+      }
+
+      &__list {
+        padding: 6px 10px 6px 16px;
+        font-size: 10px;
+      }
+    }
+
+    .history-transaction {
+      padding: 20px 0;
+      &__title {
+        padding-left: 20px;
+      }
+    }
+
+    .account-history {
+      &__chart {
+        margin-bottom: 20px;
+      }
+    }
+  }
+
+  .account-card .chart .xtick text, .account-card .chart .ytick text, .account-history .chart .xtick text, .account-history .chart .ytick text {
+    font-size: 12px !important;
+  }
+
+  /*------- currency ------*/
+  .currency {
+    .currencies, .exchange {
+      &__title, &__code, &__amount {
+        font-size: 14px;
+      }
+
+      &__firstRow {
+        margin-bottom: 0;
+        .col-sm-1 {
+          width: 12%;
+        }
+
+        .col-sm-5 {
+          width: 88%;
+          margin-bottom: 15px;
+        }
+      }
+
+      .select {
+        &__link {
+          font-size: 13px;
+          line-height: 18px;
+          &::after {
+            bottom: 13px;
+            border: 4px solid transparent;
+            border-top: 4px solid $fontColorMain;
+          }
+        }
+
+      }
+      .select__link.is-active-select::after {
+        border-top: none;
+        border-bottom: 4px solid $fontColorMain;
+      }
+
+      &__label, &__input {
+        font-size: 13px;
+      }
+
+      &__input {
+        line-height: 18px;
+      }
+    }
+
+    .course-change {
+      &__title, &__item {
+        font-size: 14px;
+      }
+    }
+   }
+
+  /*--------- map -----------*/
+  .map {
+    padding-top: 30px;
+    &__title {
+      font-size: 24px;
+    }
+  }
+
+  /*------- block with error -------*/
+  .block-with-error-app, .block-with-error {
+    padding: 1rem;
+    h3 {
+      font-size: 14px;
+    }
+  }
+}
+
+
+
+
